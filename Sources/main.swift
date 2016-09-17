@@ -13,13 +13,12 @@ let status = Application.run { app in
     window.add(widget: drawingArea)
 
     drawingArea.onDraw {
-        let cr = $1.ptr
-        cairo_set_source_rgb(cr, 0, 0, 0)
-        cairo_select_font_face(cr, "Sans", CAIRO_FONT_SLANT_NORMAL,
-                               CAIRO_FONT_WEIGHT_NORMAL)
-        cairo_set_font_size(cr, 40)
-        cairo_move_to(cr, 10, 50)
-        cairo_show_text(cr, "Hello, Cairo")
+        var cr = $1
+        cr.setSource(red: 0, green: 0, blue: 0)
+        cr.selectFontFace("Sans", slant: .normal, weight: .normal)
+        cr.fontSize = 40
+        cr.moveTo(10, 50)
+        cr.showText("Hello, Cairo")
 
         return false
     }
