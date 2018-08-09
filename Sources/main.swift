@@ -14,8 +14,11 @@ let status = Application.run { app in
 
     drawingArea.onDraw {
         var cr = $1
+        let sansSerif = "Sans"
+        let normalSlant:  cairo_font_slant_t  = .normal
+        let normalWeight: cairo_font_weight_t = .normal
         cr.setSource(red: 0, green: 0, blue: 0)
-        cr.selectFontFace("Sans", slant: .normal, weight: .normal)
+        cr.selectFontFace(sansSerif, slant: normalSlant, weight: normalWeight)
         cr.fontSize = 40
         cr.moveTo(10, 50)
         cr.showText("Hello, Cairo")
