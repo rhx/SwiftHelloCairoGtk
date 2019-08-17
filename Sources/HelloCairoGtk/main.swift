@@ -5,7 +5,7 @@ import Gtk
 var drawingArea: DrawingArea!
 
 let status = Application.run { app in
-    var window = ApplicationWindowRef(application: app)
+    let window = ApplicationWindowRef(application: app)
     window.title = "Hello, Window"
     window.setDefaultSize(width: 400, height: 90)
 
