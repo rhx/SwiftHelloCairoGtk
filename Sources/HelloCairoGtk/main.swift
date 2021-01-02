@@ -10,10 +10,10 @@ let status = Application.run(startupHandler: nil) { app in
     window.setDefaultSize(width: 400, height: 90)
 
     drawingArea = DrawingArea()
-    window.add(widget: drawingArea)
+    window.set(child: drawingArea)
 
-    drawingArea.onDraw {
-        var cr = $1
+    drawingArea.set(drawFunc: { drawingArea, cairo, width, height, data in
+        guard var cr = ContextRef(cairo) else { return }
         let sansSerif = "Sans"
         let normalSlant:  cairo_font_slant_t  = .normal
         let normalWeight: cairo_font_weight_t = .normal
@@ -22,10 +22,9 @@ let status = Application.run(startupHandler: nil) { app in
         cr.fontSize = 40
         cr.moveTo(10, 50)
         cr.showText("Hello, Cairo")
+    }, userData: nil, destroy: nil)
 
-        return false
-    }
-    window.showAll()
+    window.present()
 }
 
 guard let status = status else {
