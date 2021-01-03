@@ -12,17 +12,17 @@ let status = Application.run(startupHandler: nil) { app in
     drawingArea = DrawingArea()
     window.set(child: drawingArea)
 
-    drawingArea.set(drawFunc: { drawingArea, cairo, width, height, data in
-        guard var cr = ContextRef(cairo) else { return }
+    drawingArea.setDrawFunc { drawingArea, cairo, width, height in
         let sansSerif = "Sans"
         let normalSlant:  cairo_font_slant_t  = .normal
         let normalWeight: cairo_font_weight_t = .normal
+        var cr = cairo
         cr.setSource(red: 0, green: 0, blue: 0)
         cr.selectFontFace(sansSerif, slant: normalSlant, weight: normalWeight)
         cr.fontSize = 40
         cr.moveTo(10, 50)
         cr.showText("Hello, Cairo")
-    }, userData: nil, destroy: nil)
+    }
 
     window.present()
 }
