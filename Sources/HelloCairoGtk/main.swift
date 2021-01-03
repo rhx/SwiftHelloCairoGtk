@@ -13,7 +13,7 @@ let status = Application.run(startupHandler: nil) { app in
     window.add(widget: drawingArea)
 
     drawingArea.onDraw {
-        var cr = $1
+        let cr = $1
         let sansSerif = "Sans"
         let normalSlant:  cairo_font_slant_t  = .normal
         let normalWeight: cairo_font_weight_t = .normal
