@@ -5,17 +5,18 @@
 #
 . ./config.sh
 ./package.sh update
-if ! pushd .build/gir2swift >/dev/null 2>&1 ; then
-	mkdir -p .build
-	pushd .build >/dev/null
+if [ ! -x "${GIR2SWIFT_PATH}/gir2swift" ] &&
+   ! pushd "$BUILD_DIR/gir2swift" >/dev/null 2>&1 ; then
+	mkdir -p "$BUILD_DIR"
+	pushd "$BUILD_DIR" >/dev/null
 	git clone https://github.com/rhx/gir2swift.git
 	cd gir2swift && ./build.sh
 fi
-export PATH=`pwd`/.build/debug:${PATH}
-popd >/dev/null
-export PACKAGES=.build/checkouts
+export PATH=${BUILD_DIR}/debug:`pwd`/.build/debug:${PATH}
+popd >/dev/null 2>&1
+export PACKAGES="$BUILD_DIR/checkouts"
 [ -e $PACKAGES ] || export PACKAGES=Packages
-if which parallel >/dev/null ; then
+if which parallel >/dev/null 2>&1 ; then
   for gen in $PACKAGES/*/gir-to-swift.sh ; do \
 	echo "( cd `dirname $gen` && ./`basename $gen` $@ )" \; \
 	echo \"Generate Swift Wrapper for `basename $(dirname $gen) | cut -d- -f1`\" ; \
