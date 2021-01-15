@@ -1,20 +1,41 @@
 # SwiftHelloCairoGtk
+
 A simple 'hello-world' app showing how to draw on a canvas using SwiftGtk and SwiftCairo (although cairo is not very Swifty yet at this stage)
 
+![macOS 11 build](https://github.com/rhx/SwiftHelloCairoGtk/workflows/macOS%2011/badge.svg)
+![macOS 10.15 build](https://github.com/rhx/SwiftHelloCairoGtk/workflows/macOS%2010.15/badge.svg)
+![macOS gtk4 build](https://github.com/rhx/SwiftHelloCairoGtk/workflows/macOS%20gtk4/badge.svg)
+![Ubuntu 20.04 build](https://github.com/rhx/SwiftHelloCairoGtk/workflows/Ubuntu%2020.04/badge.svg)
+![Ubuntu 18.04 build](https://github.com/rhx/SwiftHelloCairoGtk/workflows/Ubuntu%2018.04/badge.svg)
+
 ## Building
+
 Make sure you have all the prerequisites installed (see below).  After that, you can simply clone this repository and build the command line executable (be patient, this will download all the required dependencies and take a while to compile) using
 
 	git clone https://github.com/rhx/SwiftHelloCairoGtk.git
 	cd SwiftHelloCairoGtk
-	./build.sh
-	
-After that, you can run the program using
+    ./run-gir2swift.sh
+	swift build
 
-	.build/debug/HelloCairoGtk
+You can run the program using
 
-A simple, empty 'Hello Cairo' window should appear.  To exit the program, click the close button or press Control-C in the Terminal window.
+	swift run
 
-### Xcode
+A simple, empty 'Hello World' window should appear.  To exit the program, click the close button or press Control-C in the Terminal window.
+
+### macOS
+
+Please note that on macOS, due to a bug currently in the Swift Package Manager,
+you need to pass in the build flags manually, i.e. instead of `swift build` and `swift run` you can run
+
+    swift build `./run-gir2swift.sh flags -noUpdate`
+    swift run   `./run-gir2swift.sh flags -noUpdate`
+
+Under macOS, you can also create an Application bundle that you can copy to the `/Applications` folder by using
+
+    ./app-bundle.sh
+
+#### Xcode
 
 On macOS, you can build the project using Xcode instead.  To do this, you need to create an Xcode project first, then open the project in the Xcode IDE:
 
@@ -47,7 +68,6 @@ was compiled against libraries built with earlier versions of `gir2swift`.
  * `ErrorType` has been renamed `GLibError` to ensure it neither clashes with `Swift.Error` nor the `GLib.ErrorType`  scanner enum
  * Parameters or return types for records/classes now use the corresponding, lightweight Swift `Ref` wrapper instead of the underlying pointer
 
-
 ## Prerequisites
 
 ### Swift
@@ -66,7 +86,7 @@ on macOS, or on Linux you should get something like:
 
 ### Gtk 3.22 or higher
 
-The Swift wrappers have been tested with glib-2.56, 2.58, 2.60, 2.62, and 2.64, and gdk/gtk 3.22, 3.24, and 4.0 on the `gtk4` branch.  They should work with higher versions, but YMMV.  Also make sure you have `gobject-introspection` and its `.gir` files installed.
+The Swift wrappers have been tested with glib-2.56, 2.58, 2.60, 2.62, 2.64 and 2.66, and gdk/gtk 3.22, 3.24, and 4.0 on the `gtk4` branch.  They should work with higher versions, but YMMV.  Also make sure you have `gobject-introspection` and its `.gir` files installed.
 
 #### Linux
 
@@ -99,9 +119,11 @@ On macOS, you can install gtk using HomeBrew (for setup instructions, see http:/
 
 
 ## Troubleshooting
+
 Here are some common errors you might encounter and how to fix them.
 
 ### Old Swift toolchain or Xcode
+
 If you get an error such as
 
 	$ ./build.sh 
@@ -114,3 +136,11 @@ this probably means that your Swift toolchain is too old.  Make sure the latest 
 	sudo xcode-select -s /Applications/Xcode.app
 	xcode-select --install
 
+### Known Issues
+
+ * When building, a lot of warnings appear.  This is largely an issue with automatic `RawRepresentable` conformance in the Swift Standard library.  As a workaround, you can turn this off by passing the `-Xswiftc -suppress-warnings` parameter when building.
+ 
+ * The current build system does not support directory paths with spaces (e.g. the `My Drive` directory used by Google Drive File Stream).
+ * BUILD_DIR is not supported in the current build system.
+ 
+As a workaround, you can use the old build scripts, e.g. `./build.sh` (instead of `run-gir2swift.sh` and `swift build`) to build a package.
